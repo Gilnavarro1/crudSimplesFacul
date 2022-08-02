@@ -37,7 +37,7 @@ app.post("/search", (req, res) => {
     const {ativo} = req.body;
   
     let mysql =
-      "SELECT * from pessoa WHERE name = ? AND cpf = ? AND birth = ? AND registerDate = ? AND ativo = ?";
+      "SELECT * FROM pessoa WHERE Nome = ? AND CPF = ? AND DataNascimento = ? AND DataCadastro = ? AND Ativo = ?";
     db.query(mysql, [name, cpf, birth, registerDate, ativo], (err, result) => {
       if (err) res.send(err);
       res.send(result);
@@ -60,7 +60,7 @@ app.put("/edit", (req, res) =>{
     const {birth} = req.body;
     const {registerDate} = req.body;
 
-    let SQL = "UPDATE Pessoa SET Nome = ?, CPF = ?, DataNascimento = ?, DataCadastro = ? WHERE IDPessoa = ?";
+    let SQL = "UPDATE pessoa SET Nome = ?, CPF = ?, DataNascimento = ?, DataCadastro = ? WHERE IDPessoa = ?";
 
     db.query(SQL, [name, cpf, birth, registerDate, id], (err, result) => {
         if(err) console.log(err);

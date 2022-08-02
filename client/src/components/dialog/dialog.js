@@ -7,6 +7,7 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import Axios from "axios";
 
+
 export default function FormDialog(props) {
   const [editValues, setEditValues] = useState({
     id: props.id,
@@ -16,19 +17,16 @@ export default function FormDialog(props) {
     registerDate: props.registerDate,
   });
 
-  const handleClickOpen = () => {
-    props.setOpen(true);
-  };
-
-  const handleClose = () => {
-    props.setOpen(false);
-  };
-
   const handleChangeValues = (value) => {
     setEditValues((prevValues) => ({
       ...prevValues,
       [value.target.id]: value.target.value,
     }));
+  };
+
+  const handleClose = () => {
+    props.setOpen(false);
+    window.location.reload();
   };
 
   const handleEditPessoa = () => {
@@ -38,7 +36,21 @@ export default function FormDialog(props) {
       cpf: editValues.cpf,
       birth: editValues.birth,
       registerDate: editValues.registerDate
-    })
+    }).then(() => {
+      props.setListPessoa(
+        props.listPessoa.map((value) => {
+          return value.id === editValues.id
+            ? {
+                id: editValues.id,
+                name: editValues.name,
+                cpf: editValues.cpf,
+                birth: editValues.birth,
+                registerDate: editValues.registerDate
+              }
+            : value;
+        })
+      );
+    });
     handleClose();
   };
 
@@ -54,6 +66,7 @@ export default function FormDialog(props) {
   };
 
   return (
+    <div>
       <Dialog
         open={props.open}
         onClose={handleClose}
@@ -61,6 +74,15 @@ export default function FormDialog(props) {
       >
         <DialogTitle id="form-dialog-title">Editar</DialogTitle>
         <DialogContent>
+        <TextField
+            disabled
+            margin="dense"
+            id="id"
+            label="IDPessoa"
+            defaultValue={props.id}
+            type="text"
+            fullWidth
+          />
           <TextField
             autoFocus
             margin="dense"
@@ -112,5 +134,6 @@ export default function FormDialog(props) {
           </Button>
         </DialogActions>
       </Dialog>
+      </div>
   );
 }

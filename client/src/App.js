@@ -6,27 +6,32 @@ import "./components/cards/card.css";
 
 function App() {
   const [values, setValues] = useState();
-  const [listPessoa, setListPessoa] = useState();
+  const [listPessoa, setListPessoa] = useState([]);
+  const reloadPage = () => {
+    window.location.reload();
+  };
   console.log(listPessoa);
   const handleChangeValues = (value) => {
     setValues(prevValue=>({
       ...prevValue,
       [value.target.name]: value.target.value,
-    }))
+    }));
   };
-
+  
   const handleRegisterPessoa = () => {
     Axios.post("http://localhost:3001/register", {
       name: values.name,
       cpf: values.cpf,
-      birth: values.birth,
-      registerDate: values.registerDate
+      birth: values.birthDate,
+      registerDate: values.registerDate,
+      ativo: values.userVisits,
     }).then(() => {
       Axios.post("http://localhost:3001/search", {
         name: values.name,
         cpf: values.cpf,
-        birth: values.birth,
-        registerDate: values.registerDate
+        birth: values.birthDate,
+        registerDate: values.registerDate,
+        ativo: values.userVisits,
       }).then((response) => {
         setListPessoa([
           ...listPessoa,
@@ -34,12 +39,14 @@ function App() {
             id: response.data[0].id,
             name: values.name,
             cpf: values.cpf,
-            birth: values.birth,
-            registerDate: values.registerDate
+            birth: values.birthDate,
+            registerDate: values.registerDate,
+            ativo: values.userVisits,
           },
         ]);
       });
     });
+    reloadPage();
   };
 
   useEffect(()=>{
@@ -72,7 +79,7 @@ function App() {
           <input 
           type="date" 
           name="birthDate" 
-          placeholder="Data de Nascimento" 
+          placeholder="DataNascimento" 
           className="register--input"
           onChange={handleChangeValues}
           />
@@ -80,7 +87,7 @@ function App() {
           <input 
           type="date" 
           name="registerDate" 
-          placeholder="Data de Cadastro" 
+          placeholder="DataCadastro" 
           className="register--input"
           onChange={handleChangeValues}
           />
@@ -106,11 +113,10 @@ function App() {
             <label htmlFor="no-active">Não</label>
           </div>
 
-          <button onClick={handleRegisterPessoa} className="register-button">
-          Cadastrar
-        </button>
+          <button onClick={handleRegisterPessoa} className="register--button">Cadastrar</button>
       </div>
-      {typeof listPessoa !== "undefined" && listPessoa.map((value) => {
+      
+      {listPessoa.map((value) => {
         return (
         <Card
          key={value.id} 
@@ -122,7 +128,7 @@ function App() {
          birth= {value.DataNascimento}
          registerDate= {value.DataCadastro}
          ativo= {value.Ativo}
-         ></Card>
+         />
          );
       })}
     </div>
