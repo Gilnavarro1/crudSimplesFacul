@@ -24,9 +24,25 @@ app.post("/register", (req, res)=>{
     let SQL = "INSERT INTO  Pessoa (Nome, CPF, DataNascimento, DataCadastro, Ativo) VALUES ( ?,?,?,?,?)"
 
     db.query(SQL, [name, cpf, birth, registerDate, ativo], (err, result) =>{
-        console.log(err);
+        if(err) console.log(err)
+        else res.send(result);
     });
 });
+
+app.post("/search", (req, res) => {
+    const {name} = req.body;
+    const {cpf} = req.body;
+    const {birth} = req.body;
+    const {registerDate} = req.body;
+    const {ativo} = req.body;
+  
+    let mysql =
+      "SELECT * from pessoa WHERE name = ? AND cpf = ? AND birth = ? AND registerDate = ? AND ativo = ?";
+    db.query(mysql, [name, cpf, birth, registerDate, ativo], (err, result) => {
+      if (err) res.send(err);
+      res.send(result);
+    });
+  });
 
 app.get("/getCards", (req, res) => {
     let SQL = "SELECT * FROM Pessoa";

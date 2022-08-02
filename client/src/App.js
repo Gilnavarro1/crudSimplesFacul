@@ -3,10 +3,11 @@ import "./App.css";
 import Axios from "axios";
 import Card from "./components/cards/card";
 import "./components/cards/card.css";
+
 function App() {
   const [values, setValues] = useState();
   const [listPessoa, setListPessoa] = useState();
-  console.log(listPessoa)
+  console.log(listPessoa);
   const handleChangeValues = (value) => {
     setValues(prevValue=>({
       ...prevValue,
@@ -14,15 +15,30 @@ function App() {
     }))
   };
 
-  const handleClickButton = () =>{
-    Axios.post("http://localhost:3001/register",{
+  const handleRegisterPessoa = () => {
+    Axios.post("http://localhost:3001/register", {
       name: values.name,
       cpf: values.cpf,
-      birth: values.birthDate,
-      registerDate: values.registerDate,
-      ativo: values.userVisits,
-    }).then((response)=>{
-      console.log(response);
+      birth: values.birth,
+      registerDate: values.registerDate
+    }).then(() => {
+      Axios.post("http://localhost:3001/search", {
+        name: values.name,
+        cpf: values.cpf,
+        birth: values.birth,
+        registerDate: values.registerDate
+      }).then((response) => {
+        setListPessoa([
+          ...listPessoa,
+          {
+            id: response.data[0].id,
+            name: values.name,
+            cpf: values.cpf,
+            birth: values.birth,
+            registerDate: values.registerDate
+          },
+        ]);
+      });
     });
   };
 
@@ -90,8 +106,9 @@ function App() {
             <label htmlFor="no-active">Não</label>
           </div>
 
-          <button className="register--button" 
-          onClick={() => handleClickButton()}>Cadastrar</button>
+          <button onClick={handleRegisterPessoa} className="register-button">
+          Cadastrar
+        </button>
       </div>
       {typeof listPessoa !== "undefined" && listPessoa.map((value) => {
         return (
