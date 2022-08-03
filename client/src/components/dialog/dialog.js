@@ -30,12 +30,11 @@ export default function FormDialog(props) {
   };
 
   const handleEditPessoa = () => {
-    let dataAux = new Date(editValues.DataNascimento).toLocaleDateString().split("-");
     Axios.put("http://localhost:3001/edit", {
       id: editValues.id,
       name: editValues.name,
       cpf: editValues.cpf,
-      birth: dataAux[0],
+      birth: editValues.birth,
       registerDate: editValues.registerDate
     }).then(() => {
       props.setListPessoa(
@@ -45,7 +44,7 @@ export default function FormDialog(props) {
                 id: editValues.id,
                 name: editValues.name,
                 cpf: editValues.cpf,
-                birth: dataAux[0],
+                birth: editValues.birth,
                 registerDate: editValues.registerDate
               }
             : value;
@@ -108,7 +107,7 @@ export default function FormDialog(props) {
             autoFocus
             margin="dense"
             id="birth"
-            defaultValue={props.birth}
+            defaultValue={new Date(props.birth).toLocaleDateString()}
             type="date"
             onChange={handleChangeValues}
             fullWidth
@@ -117,7 +116,7 @@ export default function FormDialog(props) {
             autoFocus
             margin="dense"
             id="registerDate"
-            defaultValue={props.registerDate}
+            defaultValue={new Date(props.registerDate).toLocaleDateString()}
             type="date"
             onChange={handleChangeValues}
             fullWidth
