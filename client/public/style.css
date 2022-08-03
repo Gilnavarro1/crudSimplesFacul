@@ -1,0 +1,7 @@
+img {
+  position: absolute;
+  width: 43%;
+  right: 1%;
+  top: 15%;
+  z-index: -1;
+}

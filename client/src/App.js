@@ -17,7 +17,7 @@ function App() {
       [value.target.name]: value.target.value,
     }));
   };
-  
+
   const handleRegisterPessoa = () => {
     Axios.post("http://localhost:3001/register", {
       name: values.name,
@@ -57,6 +57,16 @@ function App() {
 
   return (
     <div className="app--container container">
+      <header>
+        <h1>Sistema CRUD</h1>
+      </header>
+      
+      <div className="nome--alunos">
+        <h2>Alunos</h2>
+        <p>Gustavo Ávila</p>
+        <p>Gilberto Navarro</p>
+      </div>
+
       <div className="register--container">
         <h1 className="register--title">Cadastro</h1>
 
@@ -125,8 +135,8 @@ function App() {
          id={value.IDPessoa}
          name= {value.Nome}
          cpf=  {value.CPF}
-         birth= {value.DataNascimento}
-         registerDate= {value.DataCadastro}
+         birth= {new Date(value.DataNascimento).toLocaleDateString()}
+         registerDate= {new Date(value.DataCadastro).toLocaleDateString()}
          ativo= {value.Ativo}
          />
          );

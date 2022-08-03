@@ -30,11 +30,12 @@ export default function FormDialog(props) {
   };
 
   const handleEditPessoa = () => {
+    let dataAux = new Date(editValues.DataNascimento).toLocaleDateString().split("-");
     Axios.put("http://localhost:3001/edit", {
       id: editValues.id,
       name: editValues.name,
       cpf: editValues.cpf,
-      birth: editValues.birth,
+      birth: dataAux[0],
       registerDate: editValues.registerDate
     }).then(() => {
       props.setListPessoa(
@@ -44,7 +45,7 @@ export default function FormDialog(props) {
                 id: editValues.id,
                 name: editValues.name,
                 cpf: editValues.cpf,
-                birth: editValues.birth,
+                birth: dataAux[0],
                 registerDate: editValues.registerDate
               }
             : value;
